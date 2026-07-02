@@ -333,4 +333,38 @@
         function stopTalking() { clearInterval(talkInterval); document.getElementById("mascotImg").src = "./mascot-idle.png"; }
     </script>
 </body>
+        <!-- RELIABLE PUBLIC ENTERPRISE WIN98 ICON CONNECTOR ENGINE -->
+    <script>
+        // This function sweeps the desktop and forcefully injects the real Win98 graphics
+        function applyRetroIcons() {
+            const publicBank = "https://githubusercontent.com";
+
+            // 1. Swap Photography Folder Emoji for the real Windows 98 closed folder icon
+            const photoEmoji = document.querySelector("#folderPhoto .folder-emoji");
+            if (photoEmoji) photoEmoji.innerHTML = `<img src="${publicBank}/directory_closed.png" style="width:36px; height:36px; image-rendering:pixelated;" ondblclick="openProgramWindow('myPhotoWindow')">`;
+
+            // 2. Swap Graphics Folder Emoji for the vintage paint brush art file icon
+            const graphicsEmoji = document.querySelector("#folderGraphics .folder-emoji");
+            if (graphicsEmoji) graphicsEmoji.innerHTML = `<img src="${publicBank}/paint_file.png" style="width:36px; height:36px; image-rendering:pixelated;" ondblclick="openProgramWindow('myGraphicsWindow')">`;
+
+            // 3. Swap Recycle Bin Emoji for the original silver trash bin icon
+            const recycleEmoji = document.querySelector("#itemRecycleBin .folder-emoji");
+            if (recycleEmoji) recycleEmoji.innerHTML = `<img src="${publicBank}/recycle_bin_empty.png" style="width:36px; height:36px; image-rendering:pixelated;" ondblclick="openProgramWindow('myRecycleWindow')">`;
+
+            // 4. Swap Movie Slate Emoji for the classic multi-media player camera icon
+            const movieEmoji = document.querySelector("#itemMovie .folder-emoji");
+            if (movieEmoji) movieEmoji.innerHTML = `<img src="${publicBank}/mplayer_old.png" style="width:36px; height:36px; image-rendering:pixelated;" ondblclick="openProgramWindow('myMovieWindow')">`;
+
+            // 5. Swap Music Radio Emoji for the vintage CD/audio system icon
+            const musicEmoji = document.querySelector("#itemMusicApp .folder-emoji");
+            if (musicEmoji) musicEmoji.innerHTML = `<img src="${publicBank}/cd_audio_tracked.png" style="width:36px; height:36px; image-rendering:pixelated;" ondblclick="openProgramWindow('myMusicWindow')">`;
+        }
+
+        // Fire instantly when the page loads
+        window.addEventListener('load', applyRetroIcons);
+        
+        // Safety trigger fallback 2 seconds later to ensure the server registers the change
+        setTimeout(applyRetroIcons, 2000);
+    </script>
+
 </html>
