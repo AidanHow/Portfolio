@@ -1,1 +1,336 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <title>Aidan Howe - Portfolio OS</title>
+    <style>
+        body {
+            /* We try common case variants so the server doesn't choke */
+            background-image: url('background.jpg'), url('background.JPG'), url('Background.jpg');
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            height: 100vh; font-family: 'Tahoma', sans-serif; margin: 0; padding: 20px; overflow: hidden; user-select: none; cursor: cell;
+        }
+        #power-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; color: #fff; font-family: monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; cursor: pointer; }
+        #buffer-glitch { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #111; z-index: 10000; display: none; align-items: center; justify-content: center; color: #00ff00; font-family: monospace; font-size: 20px; }
+        #blue-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #0000aa; color: #ffffff; font-family: 'Courier New', monospace; padding: 50px; box-sizing: border-box; z-index: 9999; display: none; }
+        .random-image-popup { position: absolute; background: #d4d0c8; border-top: 2px solid #fff; border-left: 2px solid #fff; border-right: 2px solid #404040; border-bottom: 2px solid #404040; box-shadow: 4px 4px 20px rgba(0,0,0,0.6); padding: 3px; z-index: 400; }
+        .random-image-style { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .retro-window { display: none; position: absolute; background: #d4d0c8; border-top: 2px solid #fff; border-left: 2px solid #fff; border-right: 2px solid #404040; border-bottom: 2px solid #404040; box-shadow: 3px 3px 15px rgba(0,0,0,0.4); padding: 3px; z-index: 500; min-width: 280px; min-height: 180px; box-sizing: border-box; }
+        .title-bar { background: linear-gradient(90deg, #000080, #1084d0); color: white; padding: 3px 5px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 13px; cursor: move; }
+        .close-button { background: #d4d0c8; border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #404040; border-bottom: 1px solid #404040; width: 16px; height: 14px; font-size: 10px; font-weight: bold; color: black; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .window-body { padding: 10px; color: black; font-size: 13px; height: calc(100% - 24px); box-sizing: border-box; display: flex; flex-direction: column; }
+        .gallery-box { border-top: 2px solid #404040; border-left: 2px solid #404040; border-right: 2px solid #fff; border-bottom: 2px solid #fff; background: white; padding: 10px; margin-top: 5px; flex-grow: 1; overflow-y: auto; }
+        .resizer { width: 12px; height: 12px; background: #808080; position: absolute; right: 0; bottom: 0; cursor: se-resize; z-index: 510; }
+        .folder-icon { width: 80px; text-align: center; cursor: move; color: white; font-size: 13px; text-shadow: 1px 1px 3px black; position: absolute; z-index: 50; }
+        .folder-emoji { font-size: 40px; }
+        .mascot-container { position: absolute; bottom: 60px; right: 40px; width: 150px; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 600; cursor: move; }
+        .mascot-image { width: 100px; height: auto; }
+        .speech-bubble { background-color: white !important; color: black !important; border: 2px solid black !important; border-radius: 10px !important; padding: 10px !important; margin-bottom: 10px !important; font-size: 12px !important; position: relative !important; box-shadow: 3px 3px 0px rgba(0,0,0,0.2) !important; max-width: 180px !important; display: block !important; }
+        #system-taskbar { position: fixed; bottom: 0; left: 0; width: 100vw; height: 40px; background: #d4d0c8; border-top: 2px solid #fff; display: flex; align-items: center; padding: 0 10px; box-sizing: border-box; z-index: 9000; gap: 10px; }
+        #start-button { background: #d4d0c8; font-weight: bold; font-size: 14px; border-top: 2px solid #fff; border-left: 2px solid #fff; border-right: 2px solid #404040; border-bottom: 2px solid #404040; padding: 4px 10px; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        #start-menu-popup { display: none; position: absolute; bottom: 42px; left: 10px; width: 180px; background: #d4d0c8; border-top: 2px solid #fff; border-left: 2px solid #fff; border-right: 2px solid #404040; border-bottom: 2px solid #404040; box-shadow: 2px 2px 10px rgba(0,0,0,0.3); z-index: 9100; }
+        .start-menu-item { padding: 8px 12px; font-size: 13px; color: black; text-decoration: none; display: block; cursor: pointer; }
+        .start-menu-item:hover { background: #000080; color: white; }
+    </style>
+</head>
+<body>
+    <div id="power-screen">
+        <div style="font-size:30px; margin-bottom:15px; color:#0f0;">[ AIDAN HOWE // CREATIVE DIRECTOR ]</div>
+        <div style="font-size:14px;">> CLICK ANYWHERE TO RUN SYSTEM <</div>
+    </div>
+    <div id="buffer-glitch"><div id="glitch-text">LOAD_SYSTEM_CORE...</div></div>
+    <div id="blue-screen">
+        <div class="bsod-title">WINDOWS</div>
+        <p>A fatal exception has occurred at SYSTEM_CORE_PORTFOLIO.</p>
+        <p class="highlight-text">> AIDAN HOWE // CREATIVE DIRECTOR</p>
+        <p>* System loading... Please wait 3 seconds.</p>
+    </div>
+    <div id="image-glitch-area"></div>
+    <div id="bio-glitch-area"></div>
 
+    <div class="folder-icon" id="folderPhoto" style="top: 30px; left: 30px;" onmousedown="startItemDrag(event, this)">
+        <div class="folder-emoji" ondblclick="openProgramWindow('myPhotoWindow')">📁</div>
+        <div>Photography</div>
+    </div>
+    <div class="folder-icon" id="folderGraphics" style="top: 130px; left: 30px;" onmousedown="startItemDrag(event, this)">
+        <div class="folder-emoji" ondblclick="openProgramWindow('myGraphicsWindow')">📁</div>
+        <div>Graphics</div>
+    </div>
+    <div class="folder-icon" id="itemRecycleBin" style="top: 230px; left: 30px;" onmousedown="startItemDrag(event, this)">
+        <div class="folder-emoji" ondblclick="openProgramWindow('myRecycleWindow')">🗑️</div>
+        <div>Recycle Bin</div>
+    </div>
+    <div class="folder-icon" id="itemMovie" style="top: 330px; left: 30px;" onmousedown="startItemDrag(event, this)">
+        <div class="folder-emoji" ondblclick="openProgramWindow('myMovieWindow')">🎬</div>
+        <div>breakingpoint.mp4</div>
+    </div>
+    <div class="folder-icon" id="itemMusicApp" style="top: 430px; left: 30px;" onmousedown="startItemDrag(event, this)">
+        <div class="folder-emoji" ondblclick="openProgramWindow('myMusicWindow')">📻</div>
+        <div>Aidan's Tunes</div>
+    </div>
+
+    <div class="mascot-container" id="draggableMascot" onmousedown="startItemDrag(event, this)">
+        <div class="speech-bubble" id="bubbleText">System initializing...</div>
+        <img src="mascot-idle.png" id="mascotImg" class="mascot-image">
+    </div>
+
+    <!-- Hidden Master Audio Tracks -->
+    <audio id="soundClick" src="click.mp3" preload="auto"></audio>
+    <audio id="soundGlitch" src="glitch.mp3" preload="auto"></audio>
+    <audio id="soundStartup" src="startup.mp3" preload="auto"></audio>
+    <audio id="soundBSOD" src="bs.mp3" preload="auto"></audio>
+    <audio id="jukeboxEngine" preload="auto"></audio>
+    <!-- WINDOW OVERLAYS -->
+    <div class="retro-window" id="myPhotoWindow" style="top: 15%; left: 25%; width: 450px; height: 360px;">
+        <div class="title-bar" onmousedown="startWindowDrag(event, 'myPhotoWindow')">
+            <span>Photography.exe</span>
+            <button class="close-button" onclick="closeProgramWindow('myPhotoWindow')">X</button>
+        </div>
+        <div class="window-body">
+            <p>Selected Photography Work:</p>
+            <div class="gallery-box" id="photoGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px;"></div>
+        </div>
+        <div class="resizer" onmousedown="startWindowResize(event, 'myPhotoWindow')"></div>
+    </div>
+
+    <div class="retro-window" id="myGraphicsWindow" style="top: 20%; left: 30%; width: 450px; height: 360px;">
+        <div class="title-bar" onmousedown="startWindowDrag(event, 'myGraphicsWindow')">
+            <span>Graphics.exe</span>
+            <button class="close-button" onclick="closeProgramWindow('myGraphicsWindow')">X</button>
+        </div>
+        <div class="window-body">
+            <p>Selected Graphic Designs:</p>
+            <div class="gallery-box" id="graphicsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px;"></div>
+        </div>
+        <div class="resizer" onmousedown="startWindowResize(event, 'myGraphicsWindow')"></div>
+    </div>
+
+    <div class="retro-window" id="myRecycleWindow" style="top: 30%; left: 35%; width: 320px; height: 220px;">
+        <div class="title-bar" onmousedown="startWindowDrag(event, 'myRecycleWindow')">
+            <span>Recycle Bin</span>
+            <button class="close-button" onclick="closeProgramWindow('myRecycleWindow')">X</button>
+        </div>
+        <div class="window-body">
+            <div class="gallery-box" style="background:#eee; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+                <div>🗑️</div><div style="font-weight:bold;">Easter_Egg.txt</div>
+                <div style="font-size:11px; color:#555;">"Aidan's old design ideas from 2012 are permanently vaporised."</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="retro-window" id="myMovieWindow" style="width: 420px; height: 320px;">
+        <div class="title-bar" onmousedown="startWindowDrag(event, 'myMovieWindow')">
+            <span>Media Player</span>
+            <button class="close-button" onclick="closeProgramWindow('myMovieWindow')">X</button>
+        </div>
+        <div class="window-body" style="padding: 0; background: #000;">
+            <video id="portfolioVideo" controls style="width: 100%; height: 100%; object-fit: contain;">
+                <source src="breakingpoint.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="resizer" onmousedown="startWindowResize(event, 'myMovieWindow')"></div>
+    </div>
+
+    <div class="retro-window" id="myMusicWindow" style="top: 25%; left: 45%; width: 280px; height: 260px;">
+        <div class="title-bar" onmousedown="startWindowDrag(event, 'myMusicWindow')">
+            <span>Winamp - Aidan's Tunes</span>
+            <button class="close-button" onclick="closeProgramWindow('myMusicWindow')">X</button>
+        </div>
+        <div class="window-body">
+            <div style="background: #000; color: #00ff00; font-family: monospace; padding: 5px; text-align: center; border: 2px inset #fff; font-size: 11px; margin-bottom: 5px;" id="trackStatusDisplay">TRACK STOPPED</div>
+            <div style="display:flex; justify-content: center; gap: 4px; margin-bottom: 5px;">
+                <button onclick="controlJukebox('prev')">PREV</button>
+                <button onclick="controlJukebox('play')">PLAY</button>
+                <button onclick="controlJukebox('pause')">PAUSE</button>
+                <button onclick="controlJukebox('next')">NEXT</button>
+            </div>
+            <div class="gallery-box" id="playlistItems"></div>
+        </div>
+    </div>
+
+    <div id="system-taskbar">
+        <div id="start-button" onclick="toggleStartMenu(event)">💻 Start</div>
+        <div id="start-menu-popup">
+            <a href="mailto:aidanleehowe@gmail.com" class="start-menu-item">✉️ Contact Email</a>
+            <a href="https://instagram.com" target="_blank" class="start-menu-item">📸 Instagram Feed</a>
+        </div>
+    </div>
+    <!-- CORE SIMULATION SCRIPTS -->
+    <script>
+        let activeDragElement = null, dragOffsetX = 0, dragOffsetY = 0, highestZIndex = 600;
+        let currentTrackIndex = 1, totalJukeboxTracks = 5;
+        const jukeboxPlayer = document.getElementById("jukeboxEngine");
+        const trackDisplay = document.getElementById("trackStatusDisplay");
+
+        function playClickSound() {
+            const snd = document.getElementById("soundClick");
+            if (snd) { snd.currentTime = 0; snd.play().catch(()=>{}); }
+        }
+
+        // Auto-Generate grids and playlists safely
+        window.addEventListener('DOMContentLoaded', () => {
+            const photoGrid = document.getElementById("photoGrid");
+            const graphicsGrid = document.getElementById("graphicsGrid");
+            const playlistItems = document.getElementById("playlistItems");
+
+            for (let i = 1; i <= 50; i++) {
+                photoGrid.innerHTML += `<div class="photo-card" onclick="alert('Viewing photo${i}.png')">
+                    <div style="width:100%; height:60px; background:#eee; overflow:hidden;">
+                        <img src="./photo${i}.png" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='./photo${i}.PNG'; this.onerror=function(){this.style.display='none'; this.parentElement.innerHTML='[Img ${i}]'}">
+                    </div>
+                    <div style="font-size:10px; margin-top:3px; color:#000;">photo${i}.png</div>
+                </div>`;
+                graphicsGrid.innerHTML += `<div class="photo-card" onclick="alert('Viewing design${i}.png')">
+                    <div style="width:100%; height:60px; background:#eee; overflow:hidden;">
+                        <img src="./design${i}.png" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='./design${i}.PNG'; this.onerror=function(){this.style.display='none'; this.parentElement.innerHTML='[Design ${i}]'}">
+                    </div>
+                    <div style="font-size:10px; margin-top:3px; color:#000;">design${i}.png</div>
+                </div>`;
+            }
+
+            for (let i = 1; i <= 5; i++) {
+                playlistItems.innerHTML += `<div class="start-menu-item" style="font-size:11px; padding:4px 8px;" onclick="loadSpecificTrack(${i})">🎵 track${i}.mp3</div>`;
+            }
+
+            // Force random movie player app layout spot safely
+            const movieWin = document.getElementById("myMovieWindow");
+            if (movieWin) {
+                movieWin.style.left = (Math.random() * (window.innerWidth - 450) + 40) + "px";
+                movieWin.style.top = (Math.random() * (window.innerHeight - 350) + 40) + "px";
+            }
+        });
+
+        // MASCOT FAILURE FALLBACK PROTECTION
+        document.getElementById("mascotImg").addEventListener('error', function() {
+            if(this.src.includes('.png')) {
+                this.src = this.src.replace('.png', '.PNG');
+            } else if(this.src.includes('.PNG')) {
+                this.src = './mascot-idle.jpg';
+            }
+        });
+
+        // SYSTEM BOOT CONTROLLER TIMELINE TRIGGER
+        document.getElementById("power-screen").addEventListener("click", function() {
+            this.style.display = "none";
+            const clickCtx = document.getElementById("soundClick"), glitchCtx = document.getElementById("soundGlitch");
+            const startupCtx = document.getElementById("soundStartup"), bsodCtx = document.getElementById("soundBSOD");
+
+            // Absolute pathway verification routing
+            [clickCtx, glitchCtx, startupCtx, bsodCtx].forEach(s => {
+                if(s) { s.src = './' + s.id.replace('sound','').toLowerCase() + '.mp3'; if(s.id==='soundBSOD') s.src='./bs.mp3'; s.load(); }
+            });
+
+            let bufferText = document.getElementById("glitch-text"), stutterCount = 0;
+            document.getElementById("buffer-glitch").style.display = "flex";
+
+            let bufferInterval = setInterval(() => {
+                stutterCount++;
+                if (stutterCount % 2 === 0) {
+                    bufferText.innerText = "BUFFER_OVERFLOW: IMAGE_STREAM_0x" + Math.floor(Math.random() * 9999);
+                }
+                if (stutterCount >= 10) {
+                    clearInterval(bufferInterval);
+                    document.getElementById("buffer-glitch").style.display = "none";
+                    document.getElementById("blue-screen").style.display = "block";
+                    if (bsodCtx) bsodCtx.play().catch(()=>{});
+                    if (startupCtx) startupCtx.play().catch(()=>{});
+
+                    setTimeout(() => {
+                        document.getElementById("blue-screen").style.display = "none";
+                        if (glitchCtx) { glitchCtx.loop = true; glitchCtx.play().catch(()=>{}); }
+                        spawnImageStorm();
+                    }, 3000);
+                }
+            }, 150);
+        });
+        // Phase 3: Spawning the 10 Images
+        function spawnImageStorm() {
+            const imgArea = document.getElementById("image-glitch-area");
+            let imgCount = 1;
+            let imgInterval = setInterval(() => {
+                if (imgCount > 10) { clearInterval(imgInterval); setTimeout(spawnBioStack, 500); return; }
+                const popSnd = document.getElementById("soundClick"); if (popSnd) { popSnd.currentTime = 0; popSnd.play().catch(()=>{}); }
+                const win = document.createElement("div"); win.className = "random-image-popup";
+                win.style.width = (Math.random() * 150 + 180) + "px"; win.style.height = (Math.random() * 100 + 150) + "px";
+                win.style.top = (Math.random() * 55 + 5) + "%"; win.style.left = (Math.random() * 60 + 5) + "%";
+                win.innerHTML = `<div class="title-bar" style="background:#808080;"><span>popup${imgCount}.png</span></div>
+                    <div style="width:100%; height:calc(100% - 20px); background:#000;">
+                        <img src="./popup${imgCount}.png" class="random-image-style" onerror="this.src='./popup${imgCount}.PNG'; this.onerror=function(){this.parentElement.innerHTML='[Image ${imgCount}]';}">
+                    </div>`;
+                imgArea.appendChild(win); imgCount++;
+            }, 100);
+        }
+
+        // Phase 4: Streamlined Sequential Bio Stack Formation
+        function spawnBioStack() {
+            const bioArea = document.getElementById("bio-glitch-area");
+            const condensedBio = [
+                { title: "System_Complete.exe", text: "Double-click the Photography or Graphics folders on my desktop to check out my design work. Enjoy!" },
+                { title: "Essex_Core.dll", text: "I'm a freelance graphic designer, creative director, and photographer currently based out of Essex, UK." },
+                { title: "Welcome.sys", text: "Welcome to my interactive workspace! My name is Aidan Howe, Creative Director." }
+            ];
+            let index = 0;
+            let bioInterval = setInterval(() => {
+                if (index >= condensedBio.length) {
+                    clearInterval(bioInterval);
+                    setTimeout(() => {
+                        const glitchCtx = document.getElementById("soundGlitch"); if (glitchCtx) { glitchCtx.pause(); glitchCtx.muted=true; }
+                    }, 600);
+                    return;
+                }
+                const item = condensedBio[index];
+                const win = document.createElement("div"); win.className = "retro-window"; win.style.display = "block";
+                win.style.top = (20 + (index * 4)) + "%"; win.style.left = (30 + (index * 3)) + "%";
+                win.innerHTML = `<div class="title-bar"><span>${item.title}</span><button class="close-button" onclick="closeBioTab(this)">X</button></div><div class="window-body"><p>${item.text}</p></div>`;
+                bioArea.appendChild(win); index++;
+            }, 250);
+        }
+
+        // Phase 5: Manual Close & Self Destruct Loops
+        function closeBioTab(buttonElement) {
+            playClickSound(); buttonElement.closest('.retro-window').remove();
+            if (document.querySelectorAll('#bio-glitch-area .retro-window').length === 0) {
+                document.getElementById("bubbleText").innerText = "Workspace cleared! Welcome to my profile environment.";
+                startTalking(); setTimeout(selfDestructImagesRandomly, 1000);
+            }
+        }
+
+        function selfDestructImagesRandomly() {
+            let imagePopups = Array.from(document.querySelectorAll('.random-image-popup'));
+            if (imagePopups.length === 0) { stopTalking(); return; }
+            imagePopups[Math.floor(Math.random() * imagePopups.length)].remove();
+            setTimeout(selfDestructImagesRandomly, 150);
+        }
+
+        // NAVIGATION WINDOW, START MENU, & DRAG PARAMETERS
+        function openProgramWindow(id) { playClickSound(); const w = document.getElementById(id); w.style.display = "block"; highestZIndex++; w.style.zIndex = highestZIndex; }
+        function closeProgramWindow(id) { playClickSound(); document.getElementById(id).style.display = "none"; if(id==='myMovieWindow') document.getElementById("portfolioVideo").pause(); }
+        function maximizeWindow(id) { playClickSound(); document.getElementById(id).classList.toggle('window-maximized'); }
+        function toggleStartMenu(e) { playClickSound(); e.stopPropagation(); const m = document.getElementById("start-menu-popup"); m.style.display = (m.style.display === "block" ? "none" : "block"); }
+        document.addEventListener("click", () => { document.getElementById("start-menu-popup").style.display = "none"; });
+
+        function startItemDrag(e, target) { if (e.button !== 0) return; activeDragElement = target; highestZIndex++; target.style.zIndex = highestZIndex; dragOffsetX = e.clientX - target.getBoundingClientRect().left; dragOffsetY = e.clientY - target.getBoundingClientRect().top; document.addEventListener('mousemove', handleItemDrag); document.addEventListener('mouseup', stopItemDrag); }
+        function handleItemDrag(e) { if (!activeDragElement) return; activeDragElement.style.left = (e.clientX - dragOffsetX) + 'px'; activeDragElement.style.top = (e.clientY - dragOffsetY) + 'px'; }
+        function stopItemDrag() { activeDragElement = null; document.removeEventListener('mousemove', handleItemDrag); document.removeEventListener('mouseup', stopItemDrag); }
+        
+        let dragWindowId = null;
+        function startWindowDrag(e, id) { if (e.button !== 0) return; const w = document.getElementById(id); if (w.classList.contains('window-maximized')) return; dragWindowId = id; highestZIndex++; w.style.zIndex = highestZIndex; dragOffsetX = e.clientX - w.getBoundingClientRect().left; dragOffsetY = e.clientY - w.getBoundingClientRect().top; document.addEventListener('mousemove', handleWindowDrag); document.addEventListener('mouseup', stopWindowDrag); }
+        function handleWindowDrag(e) { if (!dragWindowId) return; const w = document.getElementById(dragWindowId); w.style.left = (e.clientX - dragOffsetX) + 'px'; w.style.top = (e.clientY - dragOffsetY) + 'px'; }
+        function stopWindowDrag() { dragWindowId = null; document.removeEventListener('mousemove', handleWindowDrag); document.removeEventListener('mouseup', stopWindowDrag); }
+        
+        let resizeWindowId = null, startWidth = 0, startHeight = 0, startX = 0, startY = 0;
+        function startWindowResize(e, id) { if (e.button !== 0) return; e.stopPropagation(); resizeWindowId = id; highestZIndex++; document.getElementById(id).style.zIndex = highestZIndex; startWidth = document.getElementById(id).offsetWidth; startHeight = document.getElementById(id).offsetHeight; startX = e.clientX; startY = e.clientY; document.addEventListener('mousemove', handleWindowResize); document.addEventListener('mouseup', stopWindowResize); }
+        function handleWindowResize(e) { if (!resizeWindowId) return; const w = document.getElementById(resizeWindowId); const nw = startWidth + (e.clientX - startX), nh = startHeight + (e.clientY - startY); if (nw > 240) w.style.width = nw + 'px'; if (nh > 140) w.style.height = nh + 'px'; }
+        function stopWindowResize() { resizeWindowId = null; document.removeEventListener('mousemove', handleWindowResize); document.removeEventListener('mouseup', stopWindowResize); }
+
+        // WINAMP AUDIO JUKEBOX CONTROLLER
+        function controlJukebox(cmd) { if (!jukeboxPlayer) return; playClickSound(); if (cmd === "play") { if (!jukeboxPlayer.src) { loadSpecificTrack(currentTrackIndex); } else { jukeboxPlayer.play().catch(()=>{}); trackDisplay.innerText = "PLAYING: music" + currentTrackIndex + ".mp3"; } } else if (cmd === "pause") { jukeboxPlayer.pause(); trackDisplay.innerText = "TRACK PAUSED"; } else if (cmd === "next") { currentTrackIndex = currentTrackIndex >= totalJukeboxTracks ? 1 : currentTrackIndex + 1; loadSpecificTrack(currentTrackIndex); } else if (cmd === "prev") { currentTrackIndex = currentTrackIndex <= 1 ? totalJukeboxTracks : currentTrackIndex - 1; loadSpecificTrack(currentTrackIndex); } }
+        function loadSpecificTrack(num) { currentTrackIndex = num; jukeboxPlayer.src = "./music" + num + ".mp3"; jukeboxPlayer.load(); trackDisplay.innerText = "PLAYING: music" + num + ".mp3"; jukeboxPlayer.play().catch(() => { trackDisplay.innerText = "[ERR: music" + num + ".mp3 missing]"; }); jukeboxPlayer.onended = () => { controlJukebox("next"); }; }
+
+        // DRAGGABLE MASCOT ANIMATION LOOP
+        let talkInterval;
+        function startTalking() { clearInterval(talkInterval); let o = false; talkInterval = setInterval(() => { o = !o; document.getElementById("mascotImg").src = o ? "./mascot-talking.png" : "./mascot-idle.png"; document.getElementById("mascotImg").onerror = function(){ if(this.src.includes('.png')) this.src=this.src.replace('.png','.PNG'); }; }, 200); }
+        function stopTalking() { clearInterval(talkInterval); document.getElementById("mascotImg").src = "./mascot-idle.png"; }
+    </script>
+</body>
+</html>
