@@ -1006,5 +1006,62 @@
         // Also run it automatically 5 seconds later as a safety fallback
         setTimeout(forceLocalIcons, 5000);
     </script>
+    <!-- GITHUB LAYERING AND DRAG REPAIR ENGINE -->
+    <script>
+        // Force the mascot container layer to sit aggressively on top of everything
+        window.addEventListener('load', () => {
+            const mascotBox = document.getElementById("draggableMascot");
+            if (mascotBox) {
+                mascotBox.style.display = "flex";
+                mascotBox.style.visibility = "visible";
+                mascotBox.style.opacity = "1";
+                mascotBox.style.zIndex = "99998";
+            }
+        });
+
+        // Completely reset your dragging calculations to prevent glitches on online servers
+        function startItemDrag(event, targetElement) {
+            if (event.button !== 0) return;
+            activeDragElement = targetElement;
+            if (typeof liftZIndex === "function") liftZIndex(targetElement.id);
+
+            const rect = targetElement.getBoundingClientRect();
+            dragOffsetX = event.clientX - rect.left;
+            dragOffsetY = event.clientY - rect.top;
+
+            document.addEventListener('mousemove', handleItemDrag);
+            document.addEventListener('mouseup', stopItemDrag);
+        }
+
+        function handleItemDrag(event) {
+            if (!activeDragElement) return;
+            activeDragElement.style.left = (event.clientX - dragOffsetX) + 'px';
+            activeDragElement.style.top = (event.clientY - dragOffsetY) + 'px';
+            activeDragElement.style.bottom = 'auto';
+            activeDragElement.style.right = 'auto';
+        }
+
+        function stopItemDrag() {
+            activeDragElement = null;
+            document.removeEventListener('mousemove', handleItemDrag);
+            document.removeEventListener('mouseup', stopItemDrag);
+        }
+    </script>
+    <!-- GITHUB AUDIO TRACK PATH ROUTING ENGINE -->
+    <script>
+        // Force re-link your sound engines to exact relative pathways for GitHub Pages
+        window.addEventListener('load', () => {
+            const clickSnd = document.getElementById("soundClick");
+            const glitchSnd = document.getElementById("soundGlitch");
+            const startupSnd = document.getElementById("soundStartup");
+            const bsodSnd = document.getElementById("soundBSOD");
+
+            // Using './' forces GitHub to look directly inside your main directory
+            if (clickSnd) clickSnd.src = "./click.mp3";
+            if (glitchSnd) glitchSnd.src = "./glitch.mp3";
+            if (startupSnd) startupSnd.src = "./startup.mp3";
+            if (bsodSnd) bsodSnd.src = "./bs.mp3";
+        });
+    </script>
 
 </html>
